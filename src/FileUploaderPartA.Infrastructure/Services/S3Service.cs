@@ -1,0 +1,52 @@
+using Amazon.Runtime.Internal.Util;
+using Amazon.S3;
+using Amazon.S3.Transfer;
+using FileUploaderPartA.Infrastructure.Configurations;
+using FileUploaderPartA.Infrastructure.Interfaces.Services;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
+
+namespace FileUploaderPartA.Infrastructure.Services;
+
+public class S3Service : IS3Service
+{
+    private readonly IAmazonS3 _s3Client;
+    private readonly ILogger _logger;
+
+    public S3Service(IOptions<AmazonS3Configuration> options, ILogger logger)
+    {
+        _s3Client = new AmazonS3Client(
+          options.Value.AccessKey,
+          options.Value.SecretKey,
+          Amazon.RegionEndpoint.GetBySystemName(options.Value.Region)
+        );
+        _logger = logger;
+    }
+
+    public async Task<bool> UploadFileAsync(string bucket, IFormFile file, string destinyPath)
+    {
+        try
+        {
+            TransferUtility fileTransferUtility = new(_s3Client);
+
+            using MemoryStream memoryStream = new();
+            await file.CopyToAsync(memoryStream);
+
+            TransferUtilityUploadRequest uploadRequest = new()
+            {
+                InputStream = memoryStream,
+                Key = destinyPath,
+                BucketName = bucket
+            };
+
+            await fileTransferUtility.UploadAsync(uploadRequest);
+            return true;
+        }
+
+        catch (Exception ex)
+        {
+            _logger.Error(ex, $"Failed to upload file to S3 bucket '{bucket}' with key '{destinyPath}'.");
+            return false;
+        }
+    }
+}

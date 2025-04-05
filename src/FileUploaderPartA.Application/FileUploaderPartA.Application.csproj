@@ -2,10 +2,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FileUploaderPartA.Core\FileUploaderPartA.Core.csproj" />
+    <ProjectReference Include="..\FileUploaderPartA.Infrastructure\FileUploaderPartA.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="MediatR" Version="12.5.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.3" />
   </ItemGroup>
 
   <PropertyGroup>

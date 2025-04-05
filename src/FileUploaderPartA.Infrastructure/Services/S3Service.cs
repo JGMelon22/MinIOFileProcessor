@@ -1,4 +1,4 @@
-using Amazon.Runtime.Internal.Util;
+using Microsoft.Extensions.Logging;
 using Amazon.S3;
 using Amazon.S3.Transfer;
 using FileUploaderPartA.Infrastructure.Configurations;
@@ -11,14 +11,18 @@ namespace FileUploaderPartA.Infrastructure.Services;
 public class S3Service : IS3Service
 {
     private readonly IAmazonS3 _s3Client;
-    private readonly ILogger _logger;
+    private readonly ILogger<S3Service> _logger;
 
-    public S3Service(IOptions<AmazonS3Configuration> options, ILogger logger)
+    public S3Service(IOptions<AmazonS3Configuration> options, ILogger<S3Service> logger)
     {
         _s3Client = new AmazonS3Client(
           options.Value.AccessKey,
           options.Value.SecretKey,
-          Amazon.RegionEndpoint.GetBySystemName(options.Value.Region)
+          new AmazonS3Config
+          {
+              ServiceURL = options.Value.ServiceURL,
+              ForcePathStyle = options.Value.ForcePathStyle
+          }
         );
         _logger = logger;
     }
@@ -31,6 +35,7 @@ public class S3Service : IS3Service
 
             using MemoryStream memoryStream = new();
             await file.CopyToAsync(memoryStream);
+            memoryStream.Position = 0; 
 
             TransferUtilityUploadRequest uploadRequest = new()
             {
@@ -45,7 +50,7 @@ public class S3Service : IS3Service
 
         catch (Exception ex)
         {
-            _logger.Error(ex, $"Failed to upload file to S3 bucket '{bucket}' with key '{destinyPath}'.");
+            _logger.LogError(ex, $"Failed to upload file to S3 bucket '{bucket}' with key '{destinyPath}'.");
             return false;
         }
     }

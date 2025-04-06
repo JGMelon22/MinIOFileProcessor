@@ -41,12 +41,15 @@ public class ImportRepository : IImportRepository
                @CreatedAt
             );";
 
-            Import parameters = new Import()
+            // string status = nameof(import.Status);
+            string status = import.Status.ToString();
+
+            var parameters = new
             {
-                Id = import.Id,
-                S3Path = import.S3Path,
-                Status = import.Status,
-                CreatedAt = import.CreatedAt
+                import.Id,
+                import.S3Path,
+                status,
+                import.CreatedAt
             };
 
             using (IDbConnection connection = _dbContext.CreateConnection())

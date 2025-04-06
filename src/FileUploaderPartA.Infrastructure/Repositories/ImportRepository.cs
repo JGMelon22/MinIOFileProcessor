@@ -1,6 +1,7 @@
 using System.Data;
 using Dapper;
 using FileUploaderPartA.Core.Domains.Imports.Entities;
+using FileUploaderPartA.Core.Domains.Imports.Enums;
 using FileUploaderPartA.Core.Shared;
 using FileUploaderPartA.Infrastructure.Data;
 using FileUploaderPartA.Infrastructure.Interfaces.Repository;
@@ -41,7 +42,6 @@ public class ImportRepository : IImportRepository
                @CreatedAt
             );";
 
-            // string status = nameof(import.Status);
             string status = import.Status.ToString();
 
             var parameters = new

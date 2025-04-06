@@ -11,7 +11,8 @@ public static class IocExtensions
     {
         services.AddScoped<IS3Service, S3Service>();
         services.AddTransient<S3Service>();
-
+        services.AddSingleton<IKafkaProducerService, KafkaProducerService>();
+        
         return services;
     }
 

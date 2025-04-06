@@ -3,6 +3,7 @@ using FileUploaderPartA.Core.Domains.Imports.Mappings;
 using FileUploaderPartA.Core.Shared;
 using FileUploaderPartA.Infrastructure.Configurations;
 using FileUploaderPartA.Infrastructure.Interfaces.Repository;
+using FileUploaderPartA.Infrastructure.Interfaces.Services;
 using FileUploaderPartA.Infrastructure.Services;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -15,16 +16,22 @@ public class CreateImportCommandHandler : IRequestHandler<CreateImportCommand, R
     private readonly S3Service _s3Service;
     private readonly IImportRepository _importRepository;
     private readonly FileUploadConfiguration _uploadConfiguration;
+    private readonly IKafkaProducerService _kafkaProducerService;
+    private readonly string _importsTopic;
 
     public CreateImportCommandHandler(
         S3Service s3Service,
         IImportRepository importRepository,
-        IOptions<FileUploadConfiguration> uploadConfigurationOptions
+        IOptions<FileUploadConfiguration> uploadConfigurationOptions,
+        IOptions<KafkaConfiguration> kafkaConfigOptions,
+        IKafkaProducerService kafkaProducerService
     )
     {
         _s3Service = s3Service;
         _importRepository = importRepository;
         _uploadConfiguration = uploadConfigurationOptions.Value;
+        _kafkaProducerService = kafkaProducerService;
+        _importsTopic = kafkaConfigOptions.Value.ImportsTopic;
     }
 
     public async Task<Result<bool>> Handle(CreateImportCommand request, CancellationToken cancellationToken)
@@ -53,7 +60,11 @@ public class CreateImportCommandHandler : IRequestHandler<CreateImportCommand, R
         if (!isSaved)
             return Result<bool>.Failure("Failed to save import entity in the database.");
 
-        return Result<bool>.Success(true);
+        bool isKafkaSuccess = await _kafkaProducerService.ProduceAsync(import.Id, import, _importsTopic);
 
+        if (!isKafkaSuccess)
+            return Result<bool>.Failure("An error occurred while attempting to produce a Kafka message.");
+
+        return Result<bool>.Success(true);
     }
 }

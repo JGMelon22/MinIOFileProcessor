@@ -17,6 +17,7 @@ builder.Services.AddMediatR(cfg =>
 
 builder.Services.Configure<AmazonS3Configuration>(builder.Configuration.GetSection("AWS"));
 builder.Services.Configure<FileUploadConfiguration>(builder.Configuration.GetSection("UploadConfiguration"));
+builder.Services.Configure<KafkaConfiguration>(builder.Configuration.GetSection("Kafka"));
 
 builder.Services.AddServices();
 

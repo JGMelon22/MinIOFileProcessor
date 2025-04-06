@@ -31,11 +31,13 @@ public class S3Service : IS3Service
     {
         try
         {
+            _logger.LogInformation("Starting file upload to S3. Bucket: {Bucket}, Key: {Key}", bucket, destinyPath);
+
             TransferUtility fileTransferUtility = new(_s3Client);
 
             using MemoryStream memoryStream = new();
             await file.CopyToAsync(memoryStream);
-            memoryStream.Position = 0; 
+            memoryStream.Position = 0;
 
             TransferUtilityUploadRequest uploadRequest = new()
             {
@@ -45,12 +47,13 @@ public class S3Service : IS3Service
             };
 
             await fileTransferUtility.UploadAsync(uploadRequest);
+
+            _logger.LogInformation("File uploaded successfully to S3. Bucket: {Bucket}, Key: {Key}", bucket, destinyPath);
             return true;
         }
-
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"Failed to upload file to S3 bucket '{bucket}' with key '{destinyPath}'.");
+            _logger.LogError(ex, "Failed to upload file to S3. Bucket: {Bucket}, Key: {Key}", bucket, destinyPath);
             return false;
         }
     }

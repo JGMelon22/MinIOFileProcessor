@@ -24,7 +24,8 @@ public class ImportRepository : IImportRepository
     {
         try
         {
-            _logger.LogInformation($"{GetType()}.{nameof(CreateAsync)} - Start: Attempting to insert import with Id {import.Id}.");
+            _logger.LogInformation("{Repository}.{Method} - Start: Attempting to insert import. Id: {ImportId}",
+    GetType().Name, nameof(CreateAsync), import.Id);
 
             const string sql = @"
             INSERT INTO imports
@@ -36,7 +37,7 @@ public class ImportRepository : IImportRepository
             )
             VALUES
             (
-               @Id, 
+               @Id,
                @S3Path,
                @Status,
                @CreatedAt
@@ -56,14 +57,22 @@ public class ImportRepository : IImportRepository
             {
                 int result = await connection.ExecuteAsync(sql, parameters);
 
-                _logger.LogInformation($"{GetType()}.{nameof(CreateAsync)} - Success: Import with Id {import.Id} inserted successfully.");
+                _logger.LogInformation("{Repository}.{Method} - Success: Import inserted. Id: {ImportId}",
+                                GetType().Name,
+                                nameof(CreateAsync),
+                                import.Id);
 
                 return result == 1;
             }
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"{GetType()}.{nameof(CreateAsync)} - Error: An error occurred while inserting import with Id {import.Id}.");
+            _logger.LogError(ex,
+                       "{Repository}.{Method} - Error inserting import. Id: {ImportId}",
+                       GetType().Name,
+                       nameof(CreateAsync),
+                       import.Id);
+
             return false;
         }
     }

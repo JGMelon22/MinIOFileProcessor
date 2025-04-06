@@ -1,6 +1,7 @@
 using FileUploaderPartA.API.Extensions;
 using FileUploaderPartA.Application.Imports.Commands.Handlers;
 using FileUploaderPartA.Infrastructure.Configurations;
+using FileUploaderPartA.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,9 @@ builder.Services.Configure<AmazonS3Configuration>(builder.Configuration.GetSecti
 builder.Services.Configure<FileUploadConfiguration>(builder.Configuration.GetSection("UploadConfiguration"));
 
 builder.Services.AddServices();
+
+builder.Services.AddScoped<DapperDbContext>();
+builder.Services.AddRepositories();
 
 var app = builder.Build();
 

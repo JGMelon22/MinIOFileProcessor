@@ -1,5 +1,8 @@
+using FileUploaderPartA.Core.Domains.Imports.Entities;
+using FileUploaderPartA.Core.Domains.Imports.Mappings;
 using FileUploaderPartA.Core.Shared;
 using FileUploaderPartA.Infrastructure.Configurations;
+using FileUploaderPartA.Infrastructure.Interfaces.Repository;
 using FileUploaderPartA.Infrastructure.Services;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -10,11 +13,17 @@ namespace FileUploaderPartA.Application.Imports.Commands.Handlers;
 public class CreateImportCommandHandler : IRequestHandler<CreateImportCommand, Result<bool>>
 {
     private readonly S3Service _s3Service;
+    private readonly IImportRepository _importRepository;
     private readonly FileUploadConfiguration _uploadConfiguration;
 
-    public CreateImportCommandHandler(S3Service s3Service, IOptions<FileUploadConfiguration> uploadConfigurationOptions)
+    public CreateImportCommandHandler(
+        S3Service s3Service,
+        IImportRepository importRepository,
+        IOptions<FileUploadConfiguration> uploadConfigurationOptions
+    )
     {
         _s3Service = s3Service;
+        _importRepository = importRepository;
         _uploadConfiguration = uploadConfigurationOptions.Value;
     }
 
@@ -37,7 +46,12 @@ public class CreateImportCommandHandler : IRequestHandler<CreateImportCommand, R
 
         string s3Url = $"{_uploadConfiguration.DNS}/{_uploadConfiguration.BucketName}/{s3Key}";
 
-        // Import import = request.request.ToDomain(s3Url);
+        Import import = MappingExtensions.ToDomain(s3Url);
+
+        bool isSaved = await _importRepository.CreateAsync(import);
+
+        if (!isSaved)
+            return Result<bool>.Failure("Failed to save import entity in the database.");
 
         return Result<bool>.Success(true);
 

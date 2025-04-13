@@ -22,6 +22,11 @@ After this initial validation and upload, a background service (to be developed)
 
 ---
 
+## 🗺️ Project Structure
+![diagram](https://github.com/user-attachments/assets/a2c4077d-876a-47c9-8c2e-5cc86c34b3df)
+
+---
+
 ## 🧰 Tech Stack
 
 <div style="display: flex; gap: 10px;">
@@ -39,3 +44,9 @@ After this initial validation and upload, a background service (to be developed)
 - **MySQL** – Relational database to store metadata  
 - **MinIO** – Local S3-compatible object storage  
 - **Apache Kafka** – Event streaming and message queuing
+
+---
+
+## 🙏 Acknowledgments
+
+- Project structure diagram created using [GitDiagram](https://gitdiagram.com/) by [@ahmedkhaleel2004](https://github.com/ahmedkhaleel2004)

@@ -23,7 +23,7 @@ After this initial validation and upload, a background service (to be developed)
 ---
 
 ## 🗺️ Project Structure
-![diagram](https://github.com/user-attachments/assets/a2c4077d-876a-47c9-8c2e-5cc86c34b3df)
+![diagram](https://github.com/user-attachments/assets/a531f1f8-af8a-49fe-8c6d-4f9cfef49f23)
 
 ---
 

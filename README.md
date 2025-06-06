@@ -14,7 +14,7 @@ To address this, a more scalable and efficient approach was adopted:
 2. ✅ Validate the CSV header for required structure  
 3. ✅ Ensure the file size does not exceed 7MB  
 
-After this initial validation and upload, a background service (to be developed) will:
+After this initial validation and upload, a background service ([System B](https://github.com/JGMelon22/MinIOFileConsumer)) will:
 
 - Consume messages from the Kafka topic
 - Check whether the file has already been processed (based on the `Status` column in the database)

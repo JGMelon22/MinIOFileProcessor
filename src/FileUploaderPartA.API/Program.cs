@@ -24,6 +24,8 @@ builder.Services.AddServices();
 builder.Services.AddScoped<DapperDbContext>();
 builder.Services.AddRepositories();
 
+builder.AddOpenTelemetryServices();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

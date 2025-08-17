@@ -1,0 +1,153 @@
+services:
+  fileuploaderparta.api:
+    image: ${DOCKER_REGISTRY-}fileuploaderpartaapi
+    build:
+      context: .
+      dockerfile: src/FileUploaderPartA.API/Dockerfile
+    depends_on:
+      - kafka
+      - minio
+      - mysql
+      - otel-collector
+    environment:
+      ConnectionStrings__Default: "Server=mysql;Database=minio_process;Uid=root;Pwd=Melon@123;Connection Timeout=60"
+      AWS__ServiceURL: "http://minio:9000"
+      AWS__AccessKey: "minioadmin"
+      AWS__SecretKey: "Melon@123"
+      AWS__BucketName: "my-bucket"
+      Kafka__Endpoint: "kafka:29092"
+      OtlpExporter__Endpoint: "http://otel-collector:4317"
+    ports:
+      - "8080:80"
+    networks:
+      - app-network
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.6.1
+    container_name: zookeeper
+    hostname: zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - app-network
+
+  kafka:
+    image: confluentinc/cp-kafka:7.6.1
+    container_name: kafka
+    hostname: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    networks:
+      - app-network
+
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    hostname: minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: Melon@123
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+    networks:
+      - app-network
+
+  mysql:
+    image: mysql:8.4.6
+    container_name: mysql
+    hostname: mysql
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: Melon@123
+      MYSQL_DATABASE: minio_process
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - app-network
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.132.2
+    container_name: otel-collector
+    volumes:
+      - ./observability/otel-collector-config.yaml:/etc/otel-collector-config.yaml:ro
+    command: 
+      - '--config'
+      - '/etc/otel-collector-config.yaml'
+    ports:
+      - "4317:4317"
+      - 8889:8889
+    depends_on:
+      - jaeger
+    networks:
+      - app-network
+
+  jaeger:
+    image: jaegertracing/all-in-one:1.72.0
+    container_name: jaeger
+    ports:
+      - 16686:16686
+      - 14268
+      - 14250
+    networks:
+      - app-network
+
+  prometheus:
+    image: prom/prometheus:v3.5.0
+    container_name: prometheus
+    user: "nobody"
+    volumes:
+      - ./observability/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--web.enable-lifecycle'
+    ports:  
+      - "9090:9090"
+    networks:
+      - app-network
+
+  grafana:
+    image: grafana/grafana-oss:12.1.1
+    container_name: grafana
+    user: "472"
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    volumes:
+      - grafana_data:/var/lib/grafana    
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  minio_data:
+  mysql_data:
+  prometheus_data:
+  grafana_data:

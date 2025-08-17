@@ -6,7 +6,7 @@ namespace FileUploaderPartA.Core.Shared.Validations.FileValidations;
 public class CsvValidations : ValidationAttribute
 {
     private const long MaxFileSizeInBytes = 2 * 1024 * 1024; // 2MB
-    private readonly string[] ValidMimeTypes = { "text/csv" };
+    private readonly string[] ValidMimeTypes = { "text/csv", "application/vnd.ms-excel" };
 
     protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
     {

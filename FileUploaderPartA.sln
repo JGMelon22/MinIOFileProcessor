@@ -15,10 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileUploaderPartA.Core", "s
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{81DDED9D-158B-E303-5F62-77A2896D2A5A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "observability", "observability", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 	ProjectSection(SolutionItems) = preProject
-		observability\otel-collector-config.yaml = observability\otel-collector-config.yaml
-		observability\prometheus.yml = observability\prometheus.yml
+		C:\Users\Antonio\Videos\otel-collector-config.yaml = C:\Users\Antonio\Videos\otel-collector-config.yaml
+		C:\Users\Antonio\Videos\prometheus.yml = C:\Users\Antonio\Videos\prometheus.yml
 	EndProjectSection
 EndProject
 Global

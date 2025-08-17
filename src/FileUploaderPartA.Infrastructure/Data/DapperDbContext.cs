@@ -1,6 +1,6 @@
-using System.Data;
 using Microsoft.Extensions.Configuration;
 using MySqlConnector;
+using System.Data;
 
 namespace FileUploaderPartA.Infrastructure.Data;
 

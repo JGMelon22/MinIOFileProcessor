@@ -1,9 +1,9 @@
-using Microsoft.Extensions.Logging;
 using Amazon.S3;
 using Amazon.S3.Transfer;
 using FileUploaderPartA.Infrastructure.Configurations;
 using FileUploaderPartA.Infrastructure.Interfaces.Services;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace FileUploaderPartA.Infrastructure.Services;

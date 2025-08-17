@@ -2,6 +2,7 @@ using FileUploaderPartA.API.Extensions;
 using FileUploaderPartA.Application.Imports.Commands.Handlers;
 using FileUploaderPartA.Infrastructure.Configurations;
 using FileUploaderPartA.Infrastructure.Data;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +26,10 @@ builder.Services.AddScoped<DapperDbContext>();
 builder.Services.AddRepositories();
 
 builder.AddOpenTelemetryServices();
+
+// Serilog Registration
+builder.Host.UseSerilog((context, config) =>
+    config.ReadFrom.Configuration(context.Configuration));
 
 var app = builder.Build();
 

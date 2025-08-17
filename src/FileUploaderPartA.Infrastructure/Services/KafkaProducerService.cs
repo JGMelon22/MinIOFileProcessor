@@ -1,16 +1,16 @@
-using System.Text.Json;
 using Confluent.Kafka;
 using FileUploaderPartA.Infrastructure.Configurations;
 using FileUploaderPartA.Infrastructure.Interfaces.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System.Text.Json;
 
 namespace FileUploaderPartA.Infrastructure.Services;
 
 public class KafkaProducerService : IKafkaProducerService
 {
     private readonly IProducer<string, string> _producer;
-    private ILogger<KafkaProducerService> _logger;
+    private readonly ILogger<KafkaProducerService> _logger;
 
     public KafkaProducerService(IOptions<KafkaConfiguration> config, ILogger<KafkaProducerService> logger)
     {

@@ -13,6 +13,11 @@ public static class IocExtensions
         services.AddTransient<S3Service>();
         services.AddSingleton<IKafkaProducerService, KafkaProducerService>();
 
+        services.AddHealthChecksUI()
+            .AddInMemoryStorage();
+
+        services.AddHealthChecks();
+
         return services;
     }
 

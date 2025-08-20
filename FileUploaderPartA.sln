@@ -17,8 +17,8 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "observability", "observability", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 	ProjectSection(SolutionItems) = preProject
-		C:\Users\Antonio\Videos\otel-collector-config.yaml = C:\Users\Antonio\Videos\otel-collector-config.yaml
-		C:\Users\Antonio\Videos\prometheus.yml = C:\Users\Antonio\Videos\prometheus.yml
+		observability\otel-collector-config.yaml = observability\otel-collector-config.yaml
+		observability\prometheus.yml = observability\prometheus.yml
 	EndProjectSection
 EndProject
 Global

@@ -71,9 +71,9 @@ A background service ([System B](https://github.com/JGMelon22/MinIOFileConsumer)
 
 ### 🔧 Custom Dashboards
 Three Grafana dashboards are included in the project under the [`dashboards/`](./dashboards) directory:  
-- **Simple Kafka Producer Dashboard**  
+- **ASP.NET Runtime and Processes Dashboard**
 - **HTTP Metrics Dashboard**  
-- **ASP.NET Runtime and Processes Dashboard**  
+- **Simple Kafka Producer Dashboard**  
 
 These can be imported directly into Grafana to monitor application runtime, Kafka producers, and HTTP-level metrics.
 
@@ -82,7 +82,7 @@ These can be imported directly into Grafana to monitor application runtime, Kafk
 - Example **Grafana dashboards** with application and Kafka metrics.  
 <img width="800" alt="Captura de tela 2025-08-23 114902" src="https://github.com/user-attachments/assets/88ab1bed-8272-42fb-aceb-65cdf90f4d59" />
 <img width="800" alt="Captura de tela 2025-08-23 115219" src="https://github.com/user-attachments/assets/8fa282d1-eecf-41ee-a752-9a56576748d0" />
-<img width="800" alt="Captura de tela 2025-08-23 115452" src="https://github.com/user-attachments/assets/fe87eb3d-1b4c-4dd9-b4ca-1cb372079dc8" />
+<img width="800" alt="Captura de tela 2025-08-23 115303" src="https://github.com/user-attachments/assets/d985f5d3-23fb-494b-a707-176745fa0d9f" />
 
 - Sample **Jaeger trace** showing request flow across services.  
 <img width="800" alt="Captura de tela 2025-08-23 115336" src="https://github.com/user-attachments/assets/faa3c9b8-3f79-4f1c-889d-f99f29ceb259" />

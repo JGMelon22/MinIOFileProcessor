@@ -52,6 +52,22 @@ services:
     networks:
       - app-network
 
+  # danielqsj Kafka Exporter
+  kafka-exporter:
+    image: danielqsj/kafka-exporter:latest
+    container_name: kafka-exporter
+    hostname: kafka-exporter
+    ports:
+      - "9308:9308"
+    command:
+      - '--kafka.server=kafka:29092'
+      - '--web.listen-address=:9308'
+      - '--log.level=info'
+    depends_on:
+      - kafka
+    networks:
+      - app-network
+
   minio:
     image: minio/minio:latest
     container_name: minio
@@ -119,7 +135,6 @@ services:
     ports:      
       - 5341:5341
       - 8081:80
-
     volumes:
       - seq_data:/data
     networks:
@@ -167,4 +182,4 @@ volumes:
   mysql_data:
   prometheus_data:
   grafana_data:
-  seq_data:  
+  seq_data:

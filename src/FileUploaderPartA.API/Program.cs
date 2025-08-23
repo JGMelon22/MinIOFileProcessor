@@ -4,7 +4,6 @@ using FileUploaderPartA.Infrastructure.Configurations;
 using FileUploaderPartA.Infrastructure.Data;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);

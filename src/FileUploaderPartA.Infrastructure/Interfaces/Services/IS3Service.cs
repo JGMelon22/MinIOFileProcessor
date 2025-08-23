@@ -4,5 +4,5 @@ namespace FileUploaderPartA.Infrastructure.Interfaces.Services;
 
 public interface IS3Service
 {
-    Task<bool> UploadFileAsync(string bucket, IFormFile file, string destinyPath);
+    Task UploadFileAsync(string bucket, IFormFile file, string destinyPath);
 }

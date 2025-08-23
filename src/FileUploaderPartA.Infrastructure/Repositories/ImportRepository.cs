@@ -66,7 +66,7 @@ public class ImportRepository : IImportRepository
             _logger.LogError(ex, "{Repository}.{Method} - Error creating import {@Import}",
                 GetType().Name, nameof(CreateAsync), import);
 
-            return false;
+            throw;
         }
     }
 }

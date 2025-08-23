@@ -27,7 +27,7 @@ public class S3Service : IS3Service
         _logger = logger;
     }
 
-    public async Task<bool> UploadFileAsync(string bucket, IFormFile file, string destinyPath)
+    public async Task UploadFileAsync(string bucket, IFormFile file, string destinyPath)
     {
         try
         {
@@ -49,12 +49,11 @@ public class S3Service : IS3Service
             await fileTransferUtility.UploadAsync(uploadRequest);
 
             _logger.LogInformation("File uploaded successfully to S3. Bucket: {Bucket}, Key: {Key}", bucket, destinyPath);
-            return true;
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to upload file to S3. Bucket: {Bucket}, Key: {Key}", bucket, destinyPath);
-            return false;
+            throw;
         }
     }
 }

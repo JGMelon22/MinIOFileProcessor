@@ -22,7 +22,7 @@ public class KafkaProducerService : IKafkaProducerService
         _logger = logger;
     }
 
-    public async Task<bool> ProduceAsync<T>(string key, T message, string topic)
+    public async Task ProduceAsync<T>(string key, T message, string topic)
     {
         JsonSerializerOptions jsonOptions = new()
         {
@@ -46,7 +46,6 @@ public class KafkaProducerService : IKafkaProducerService
                 Value = jsonMessage
             });
 
-            return true;
         }
         catch (ProduceException<string, string> ex)
         {
@@ -58,7 +57,7 @@ public class KafkaProducerService : IKafkaProducerService
                 key,
                 topic);
 
-            return false;
+            throw;
         }
     }
 }

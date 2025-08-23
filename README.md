@@ -1,28 +1,39 @@
-# MinIOFileProcessor - System A
+# MinIOFileProcessor - System A (Observability Branch)
 
-This project handles the upload of CSV files to [MinIO](https://github.com/minio/minio) — a local simulation of Amazon S3. After uploading, it stores the file's storage path in a MySQL database and publishes a message to a Kafka topic to notify downstream services.
+This project handles the upload of CSV files to MinIO — a local simulation of Amazon S3. After uploading, it stores the file's storage path in a MySQL database and publishes a message to a Kafka topic to notify downstream services.
+
+---
+
+## 🔎 Extension with Observability
+
+This branch extends the original project by **including observability tools** to improve monitoring, troubleshooting, and performance insights.  
+
+The extensions include:  
+- **Health Checks** – Liveness and readiness endpoints.  
+- **Custom Kafka Metrics** – Exported via [kafka_exporter](https://github.com/danielqsj/kafka_exporter).  
+- **Prometheus** – Metrics collection and alerting.  
+- **Grafana** – Dashboards for visualization and analysis.  
+- **Jaeger** – Distributed tracing with OpenTelemetry.  
+- **Serilog + SEQ** – Structured logging for centralized log search.  
+
+With these tools, the system not only processes file uploads and notifications, but also provides full visibility into its health, metrics, and traces.
 
 ---
 
 ## 🚀 Motivation
 
-In a real-world scenario, I encountered the need to upload CSV files into an internal system. These files could be quite large (up to 7MB with ~100,000 rows), making real-time validation inefficient and performance-heavy.
+In real-world scenarios, large CSV file uploads (up to 7MB and ~100,000 rows) can make real-time validation inefficient.  
+To improve scalability and maintainability, the system adopts a two-phase approach:
 
-To address this, a more scalable and efficient approach was adopted:
+1. ✅ Validate MIME type, header, and file size (≤ 7MB).  
+2. ✅ Upload to MinIO and store metadata in MySQL.  
+3. ✅ Publish a message to Kafka to notify downstream services.  
 
-1. ✅ Validate the MIME type to ensure it's a genuine CSV file  
-2. ✅ Validate the CSV header for required structure  
-3. ✅ Ensure the file size does not exceed 7MB  
-
-After this initial validation and upload, a background service ([System B](https://github.com/JGMelon22/MinIOFileConsumer)) will:
-
-- Consume messages from the Kafka topic
-- Check whether the file has already been processed (based on the `Status` column in the database)
-- Process the file's content according to business rules asynchronously
+A background service ([System B](https://github.com/JGMelon22/MinIOFileConsumer)) then asynchronously processes the file content based on business rules.
 
 ---
 
-## 🗺️ Project Structure
+## 🗺️ Project Architecture
 ![diagram](https://github.com/user-attachments/assets/a531f1f8-af8a-49fe-8c6d-4f9cfef49f23)
 
 ---
@@ -35,18 +46,56 @@ After this initial validation and upload, a background service ([System B](https
     <img height="32" width="32" src="https://cdn.simpleicons.org/mysql" alt="MySQL" title="MySQL" />
     <img height="32" width="32" src="https://cdn.simpleicons.org/minio" alt="MinIO" title="MinIO" />
     <img height="32" width="32" src="https://cdn.simpleicons.org/apachekafka" alt="Apache Kafka" title="Apache Kafka" />
+    <img height="32" width="32" src="https://cdn.simpleicons.org/jaeger" alt="Jaeger" title="Jaeger" />
+    <img height="32" width="32" src="https://cdn.simpleicons.org/prometheus" alt="Prometheus" title="Prometheus" />
+    <img height="32" width="32" src="https://cdn.simpleicons.org/grafana" alt="Grafana" title="Grafana" />
+    <img height="32" width="32" src="https://cdn.simpleicons.org/opentelemetry" alt="OpenTelemetry" title="OpenTelemetry" />
 </div>
 
 <br/>
 
-- **.NET** – Main backend framework  
-- **Swagger** – API documentation  
-- **MySQL** – Relational database to store metadata  
-- **MinIO** – Local S3-compatible object storage  
-- **Apache Kafka** – Event streaming and message queuing
+- **.NET** – Backend framework.  
+- **Swagger** – API documentation.  
+- **MySQL** – Relational database for metadata.  
+- **MinIO** – S3-compatible object storage (local).  
+- **Apache Kafka** – Event streaming and queuing.  
+- **Jaeger** – Distributed tracing platform.  
+- **Grafana** – Visualization and dashboards.  
+- **Prometheus** – Monitoring & alerting system.  
+- **Serilog** – Structured logging for .NET.  
+- **SEQ** – Real-time log search and analysis.  
+
+---
+
+## 📊 Observability in Action
+
+### 🔧 Custom Dashboards
+Three Grafana dashboards are included in the project under the [`dashboards/`](./dashboards) directory:  
+- **Simple Kafka Producer Dashboard**  
+- **HTTP Metrics Dashboard**  
+- **ASP.NET Runtime and Processes Dashboard**  
+
+These can be imported directly into Grafana to monitor application runtime, Kafka producers, and HTTP-level metrics.
+
+### 🖼️ Example Visualizations
+
+- Example **Grafana dashboards** with application and Kafka metrics.  
+<img width="800" alt="Captura de tela 2025-08-23 114902" src="https://github.com/user-attachments/assets/88ab1bed-8272-42fb-aceb-65cdf90f4d59" />
+<img width="800" alt="Captura de tela 2025-08-23 115219" src="https://github.com/user-attachments/assets/8fa282d1-eecf-41ee-a752-9a56576748d0" />
+<img width="800" alt="Captura de tela 2025-08-23 115452" src="https://github.com/user-attachments/assets/fe87eb3d-1b4c-4dd9-b4ca-1cb372079dc8" />
+
+- Sample **Jaeger trace** showing request flow across services.  
+<img width="800" alt="Captura de tela 2025-08-23 115336" src="https://github.com/user-attachments/assets/faa3c9b8-3f79-4f1c-889d-f99f29ceb259" />
+
+- **SEQ dashboard** for structured logging and analysis.  
+<img width="800" alt="Captura de tela 2025-08-23 120005" src="https://github.com/user-attachments/assets/d47575ef-a001-4438-8cd6-ee1616c5ebb4" />
+
+- Health check endpoints exposed under `/health`.  
+<img width="800" alt="Captura de tela 2025-08-23 115452" src="https://github.com/user-attachments/assets/b6a11210-6bc8-4281-9f57-997fde785e6e" />
 
 ---
 
 ## 🙏 Acknowledgments
 
-- Project structure diagram created using [GitDiagram](https://gitdiagram.com/) by [@ahmedkhaleel2004](https://github.com/ahmedkhaleel2004)
+- **Kafka metrics** powered by [kafka_exporter](https://github.com/danielqsj/kafka_exporter) by [@danielqsj](https://github.com/danielqsj)  
+- **Architecture diagram** generated with [GitDiagram](https://gitdiagram.com/) by [@ahmedkhaleel2004](https://github.com/ahmedkhaleel2004)  

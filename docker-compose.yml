@@ -65,6 +65,7 @@ services:
       - '--log.level=info'
     depends_on:
       - kafka
+    restart: unless-stopped
     networks:
       - app-network
 

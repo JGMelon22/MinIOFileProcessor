@@ -3,7 +3,7 @@
         "list": [
         ]
     },
-    "description": "Simple Kafka Producer Dashboard",
+    "description": "Simple Kafka Producer Dashboard (Compact)",
     "editable": true,
     "fiscalYearStartMonth": 0,
     "graphTooltip": 0,
@@ -22,14 +22,11 @@
                     "color": {
                         "mode": "thresholds"
                     },
-                    "mappings": [
-                    ],
                     "thresholds": {
                         "mode": "absolute",
                         "steps": [
                             {
-                                "color": "red",
-                                "value": null
+                                "color": "red"
                             },
                             {
                                 "color": "green",
@@ -41,33 +38,24 @@
                 }
             },
             "gridPos": {
-                "h": 6,
-                "w": 8,
+                "h": 4,
+                "w": 6,
                 "x": 0,
                 "y": 0
             },
             "id": 1,
             "options": {
                 "colorMode": "background",
-                "graphMode": "area",
                 "justifyMode": "center",
-                "orientation": "auto",
                 "reduceOptions": {
                     "calcs": [
                         "lastNotNull"
-                    ],
-                    "fields": "",
-                    "values": false
+                    ]
                 },
                 "textMode": "auto"
             },
-            "pluginVersion": "9.0.0",
             "targets": [
                 {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "prometheus"
-                    },
                     "expr": "kafka_brokers",
                     "refId": "A"
                 }
@@ -85,14 +73,11 @@
                     "color": {
                         "mode": "thresholds"
                     },
-                    "mappings": [
-                    ],
                     "thresholds": {
                         "mode": "absolute",
                         "steps": [
                             {
-                                "color": "green",
-                                "value": null
+                                "color": "green"
                             }
                         ]
                     },
@@ -100,33 +85,24 @@
                 }
             },
             "gridPos": {
-                "h": 6,
-                "w": 8,
-                "x": 8,
+                "h": 4,
+                "w": 6,
+                "x": 6,
                 "y": 0
             },
             "id": 2,
             "options": {
                 "colorMode": "background",
-                "graphMode": "area",
                 "justifyMode": "center",
-                "orientation": "auto",
                 "reduceOptions": {
                     "calcs": [
                         "lastNotNull"
-                    ],
-                    "fields": "",
-                    "values": false
+                    ]
                 },
                 "textMode": "auto"
             },
-            "pluginVersion": "9.0.0",
             "targets": [
                 {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "prometheus"
-                    },
                     "expr": "count(kafka_topic_partitions)",
                     "refId": "A"
                 }
@@ -144,14 +120,11 @@
                     "color": {
                         "mode": "thresholds"
                     },
-                    "mappings": [
-                    ],
                     "thresholds": {
                         "mode": "absolute",
                         "steps": [
                             {
-                                "color": "green",
-                                "value": null
+                                "color": "green"
                             }
                         ]
                     },
@@ -159,33 +132,24 @@
                 }
             },
             "gridPos": {
-                "h": 6,
-                "w": 8,
-                "x": 16,
+                "h": 4,
+                "w": 6,
+                "x": 12,
                 "y": 0
             },
             "id": 3,
             "options": {
                 "colorMode": "background",
-                "graphMode": "area",
                 "justifyMode": "center",
-                "orientation": "auto",
                 "reduceOptions": {
                     "calcs": [
                         "lastNotNull"
-                    ],
-                    "fields": "",
-                    "values": false
+                    ]
                 },
                 "textMode": "auto"
             },
-            "pluginVersion": "9.0.0",
             "targets": [
                 {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "prometheus"
-                    },
                     "expr": "sum(kafka_topic_partitions)",
                     "refId": "A"
                 }
@@ -203,74 +167,27 @@
                     "color": {
                         "mode": "palette-classic"
                     },
-                    "custom": {
-                        "axisLabel": "",
-                        "axisPlacement": "auto",
-                        "barAlignment": 0,
-                        "drawStyle": "line",
-                        "fillOpacity": 10,
-                        "gradientMode": "none",
-                        "hideFrom": {
-                            "legend": false,
-                            "tooltip": false,
-                            "vis": false
-                        },
-                        "lineInterpolation": "linear",
-                        "lineWidth": 2,
-                        "pointSize": 5,
-                        "scaleDistribution": {
-                            "type": "linear"
-                        },
-                        "showPoints": "never",
-                        "spanNulls": false,
-                        "stacking": {
-                            "group": "A",
-                            "mode": "none"
-                        },
-                        "thresholdsStyle": {
-                            "mode": "off"
-                        }
-                    },
-                    "mappings": [
-                    ],
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": null
-                            }
-                        ]
-                    },
                     "unit": "short"
                 }
             },
             "gridPos": {
-                "h": 9,
-                "w": 24,
+                "h": 10,
+                "w": 12,
                 "x": 0,
-                "y": 6
+                "y": 4
             },
             "id": 4,
             "options": {
                 "legend": {
-                    "calcs": [
-                    ],
                     "displayMode": "table",
                     "placement": "right"
                 },
                 "tooltip": {
-                    "mode": "single",
-                    "sort": "none"
+                    "mode": "single"
                 }
             },
-            "pluginVersion": "9.0.0",
             "targets": [
                 {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "prometheus"
-                    },
                     "expr": "sum by (topic) (kafka_topic_partition_current_offset)",
                     "legendFormat": "{{topic}}",
                     "refId": "A"
@@ -289,74 +206,27 @@
                     "color": {
                         "mode": "palette-classic"
                     },
-                    "custom": {
-                        "axisLabel": "",
-                        "axisPlacement": "auto",
-                        "barAlignment": 0,
-                        "drawStyle": "line",
-                        "fillOpacity": 10,
-                        "gradientMode": "none",
-                        "hideFrom": {
-                            "legend": false,
-                            "tooltip": false,
-                            "vis": false
-                        },
-                        "lineInterpolation": "linear",
-                        "lineWidth": 2,
-                        "pointSize": 5,
-                        "scaleDistribution": {
-                            "type": "linear"
-                        },
-                        "showPoints": "never",
-                        "spanNulls": false,
-                        "stacking": {
-                            "group": "A",
-                            "mode": "none"
-                        },
-                        "thresholdsStyle": {
-                            "mode": "off"
-                        }
-                    },
-                    "mappings": [
-                    ],
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": null
-                            }
-                        ]
-                    },
                     "unit": "reqps"
                 }
             },
             "gridPos": {
-                "h": 9,
-                "w": 24,
-                "x": 0,
-                "y": 15
+                "h": 10,
+                "w": 12,
+                "x": 12,
+                "y": 4
             },
             "id": 5,
             "options": {
                 "legend": {
-                    "calcs": [
-                    ],
                     "displayMode": "table",
                     "placement": "right"
                 },
                 "tooltip": {
-                    "mode": "single",
-                    "sort": "none"
+                    "mode": "single"
                 }
             },
-            "pluginVersion": "9.0.0",
             "targets": [
                 {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "prometheus"
-                    },
                     "expr": "sum by (topic) (rate(kafka_topic_partition_current_offset[1m]))",
                     "legendFormat": "{{topic}}",
                     "refId": "A"
@@ -372,19 +242,11 @@
             },
             "fieldConfig": {
                 "defaults": {
-                    "custom": {
-                        "align": "auto",
-                        "displayMode": "auto",
-                        "inspect": false
-                    },
-                    "mappings": [
-                    ],
                     "thresholds": {
                         "mode": "absolute",
                         "steps": [
                             {
-                                "color": "green",
-                                "value": null
+                                "color": "green"
                             }
                         ]
                     }
@@ -394,25 +256,14 @@
                 "h": 8,
                 "w": 24,
                 "x": 0,
-                "y": 24
+                "y": 14
             },
             "id": 6,
             "options": {
-                "showHeader": true,
-                "sortBy": [
-                    {
-                        "desc": false,
-                        "displayName": "Topic"
-                    }
-                ]
+                "showHeader": true
             },
-            "pluginVersion": "9.0.0",
             "targets": [
                 {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "prometheus"
-                    },
                     "expr": "kafka_topic_partitions",
                     "format": "table",
                     "instant": true,
@@ -429,8 +280,6 @@
                             "__name__": true,
                             "instance": true,
                             "job": true
-                        },
-                        "indexByName": {
                         },
                         "renameByName": {
                             "Value": "Partitions",
@@ -457,11 +306,7 @@
         "from": "now-30m",
         "to": "now"
     },
-    "timepicker": {
-    },
-    "timezone": "",
-    "title": "Simple Kafka Producer Dashboard",
-    "uid": "simple-kafka-producer",
-    "version": 1,
-    "weekStart": ""
+    "title": "Simple Kafka Producer Dashboard (Compact)",
+    "uid": "simple-kafka-producer-compact",
+    "version": 2
 }

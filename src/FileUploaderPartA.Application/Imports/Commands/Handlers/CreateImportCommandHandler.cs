@@ -4,7 +4,6 @@ using FileUploaderPartA.Core.Shared;
 using FileUploaderPartA.Infrastructure.Configurations;
 using FileUploaderPartA.Infrastructure.Interfaces.Repository;
 using FileUploaderPartA.Infrastructure.Interfaces.Services;
-using FileUploaderPartA.Infrastructure.Services;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;

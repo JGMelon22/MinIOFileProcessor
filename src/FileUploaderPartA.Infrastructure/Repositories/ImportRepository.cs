@@ -25,41 +25,39 @@ public class ImportRepository : IImportRepository
             _logger.LogInformation("{Repository}.{Method} - Start: Creating import {@Import}",
                 GetType().Name, nameof(CreateAsync), import);
 
-            const string sql = @"
-            INSERT INTO imports
-            (
-               id,
-               s3_path,
-               status,
-               created_at
-            )
-            VALUES
-            (
-               @Id,
-               @S3Path,
-               @Status,
-               @CreatedAt
-            );";
-
-            string status = import.Status.ToString();
+            const string sql = """
+                INSERT INTO imports
+                (
+                   id,
+                   s3_path,
+                   status,
+                   created_at
+                )
+                VALUES
+                (
+                   @Id,
+                   @S3Path,
+                   @Status,
+                   @CreatedAt
+                );
+                """;
 
             var parameters = new
             {
                 import.Id,
                 import.S3Path,
-                Status = status,
+                Status = nameof(import.Status.Pending),
                 import.CreatedAt
             };
 
-            using (IDbConnection connection = _dbContext.CreateConnection())
-            {
-                int result = await connection.ExecuteAsync(sql, parameters);
+            using IDbConnection connection = _dbContext.CreateConnection();
 
-                _logger.LogInformation("{Repository}.{Method} - Success: Import created {ImportId}",
-                    GetType().Name, nameof(CreateAsync), import.Id);
+            int result = await connection.ExecuteAsync(sql, parameters);
 
-                return result == 1;
-            }
+            _logger.LogInformation("{Repository}.{Method} - Success: Import created {ImportId}",
+                GetType().Name, nameof(CreateAsync), import.Id);
+
+            return result == 1;
         }
         catch (Exception ex)
         {

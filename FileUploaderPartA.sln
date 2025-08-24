@@ -21,10 +21,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "observability", "observabil
 		observability\prometheus.yml = observability\prometheus.yml
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{69FB221D-BA98-4F01-A758-E8D4D6CEA1F3}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{FC8FEB33-B32E-4BA4-836A-473F479A2057}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -60,7 +56,6 @@ Global
 		{996E99DC-13B2-499A-B25B-29839929A1AA} = {8F4B3399-128C-48E0-ABC9-A608F015F8FF}
 		{D961592B-D8C5-4972-A5A2-B865F49FF0D7} = {8F4B3399-128C-48E0-ABC9-A608F015F8FF}
 		{77C4C6CC-6043-4114-8A74-4A7FEABC5EEE} = {8F4B3399-128C-48E0-ABC9-A608F015F8FF}
-		{FC8FEB33-B32E-4BA4-836A-473F479A2057} = {69FB221D-BA98-4F01-A758-E8D4D6CEA1F3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D6ABC860-4274-4F7A-BD15-CF2F68D3B043}

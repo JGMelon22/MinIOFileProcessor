@@ -18,13 +18,13 @@ public class ImportsController : ControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> ImportFileAsync([FromForm] CreateImportRequest newImportFile)
     {
         Result<bool> file = await _mediator.Send(new CreateImportCommand(newImportFile));
         return file.IsSuccess
-            ? NoContent()
+            ? Created()
             : BadRequest(file);
     }
 }

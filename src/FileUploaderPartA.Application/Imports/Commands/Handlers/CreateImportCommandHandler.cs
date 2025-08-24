@@ -13,14 +13,14 @@ namespace FileUploaderPartA.Application.Imports.Commands.Handlers;
 
 public class CreateImportCommandHandler : IRequestHandler<CreateImportCommand, Result<bool>>
 {
-    private readonly S3Service _s3Service;
+    private readonly IS3Service _s3Service;
     private readonly IImportRepository _importRepository;
     private readonly FileUploadConfiguration _uploadConfiguration;
     private readonly IKafkaProducerService _kafkaProducerService;
     private readonly string _importsTopic;
 
     public CreateImportCommandHandler(
-        S3Service s3Service,
+        IS3Service s3Service,
         IImportRepository importRepository,
         IOptions<FileUploadConfiguration> uploadConfigurationOptions,
         IOptions<KafkaConfiguration> kafkaConfigOptions,

@@ -18,11 +18,21 @@ public class ImportsController : ControllerBase
     }
 
     [HttpPost]
+    [Consumes("multipart/form-data")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> ImportFileAsync([FromForm] CreateImportRequest newImportFile)
+    public async Task<IActionResult> ImportFileAsync(IFormFile newImportFile)
     {
-        Result<bool> file = await _mediator.Send(new CreateImportCommand(newImportFile));
+        FileData fileData = new(
+           Content: newImportFile.OpenReadStream(),
+           FileName: newImportFile.FileName,
+           ContentType: newImportFile.ContentType,
+           Length: newImportFile.Length
+       );
+
+        CreateImportRequest request = new(fileData);
+
+        Result<bool> file = await _mediator.Send(new CreateImportCommand(request));
         return file.IsSuccess
             ? NoContent()
             : BadRequest(file);

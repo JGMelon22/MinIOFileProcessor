@@ -1,11 +1,9 @@
-using System.Data;
 using Dapper;
 using FileUploaderPartA.Core.Domains.Imports.Entities;
-using FileUploaderPartA.Core.Domains.Imports.Enums;
-using FileUploaderPartA.Core.Shared;
 using FileUploaderPartA.Infrastructure.Data;
 using FileUploaderPartA.Infrastructure.Interfaces.Repository;
 using Microsoft.Extensions.Logging;
+using System.Data;
 
 namespace FileUploaderPartA.Infrastructure.Repositories;
 

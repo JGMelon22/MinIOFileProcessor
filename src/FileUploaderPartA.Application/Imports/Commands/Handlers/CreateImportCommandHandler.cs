@@ -6,7 +6,6 @@ using FileUploaderPartA.Infrastructure.Interfaces.Repository;
 using FileUploaderPartA.Infrastructure.Interfaces.Services;
 using FileUploaderPartA.Infrastructure.Services;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 
 namespace FileUploaderPartA.Application.Imports.Commands.Handlers;
@@ -36,7 +35,7 @@ public class CreateImportCommandHandler : IRequestHandler<CreateImportCommand, R
 
     public async Task<Result<bool>> Handle(CreateImportCommand request, CancellationToken cancellationToken)
     {
-        IFormFile file = request.request.CsvFile;
+        FileData file = request.request.CsvFile;
 
         string fileName = Path.GetFileName(file.FileName);
         string uniqueName = $"{Guid.NewGuid()}_{fileName}";
@@ -44,7 +43,7 @@ public class CreateImportCommandHandler : IRequestHandler<CreateImportCommand, R
 
         bool uploadSuccess = await _s3Service.UploadFileAsync(
             bucket: _uploadConfiguration.BucketName,
-            file: file,
+            fileStream: file.Content,
             destinyPath: s3Key
         );
 

@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Http;
 
 namespace FileUploaderPartA.Core.Shared.Validations.FileValidations;
 
@@ -13,17 +12,21 @@ public class CsvValidations : ValidationAttribute
         if (value == null)
             return new ValidationResult("A CSV file is required.");
 
-        if (value is IFormFile file)
-        {
-            if (file.Length > MaxFileSizeInBytes)
-                return new ValidationResult($"The file size exceeds the maximum allowed size of {MaxFileSizeInBytes / 1024}KB.");
+        if (value is not FileData file)
+            return new ValidationResult($"The input must be a {nameof(FileData)}.");
 
-            if (!ValidMimeTypes.Contains(file.ContentType))
-                return new ValidationResult($"File must be one of the following types: {string.Join(", ", ValidMimeTypes)}");
+        if (file.Content == null)
+            return new ValidationResult("File content cannot be null.");
 
-            return ValidationResult.Success;
-        }
+        if (file.Length <= 0)
+            return new ValidationResult("File cannot be empty.");
 
-        return new ValidationResult($"The input must be an {nameof(IFormFile)} or {nameof(Stream)}.");
+        if (file.Length > MaxFileSizeInBytes)
+            return new ValidationResult($"The file size exceeds the maximum allowed size of {MaxFileSizeInBytes / (1024 * 1024)}MB.");
+
+        if (string.IsNullOrEmpty(file.ContentType) || !ValidMimeTypes.Contains(file.ContentType, StringComparer.OrdinalIgnoreCase))
+            return new ValidationResult($"File must be one of the following types: {string.Join(", ", ValidMimeTypes)}");
+
+        return ValidationResult.Success;
     }
 }

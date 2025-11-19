@@ -1,9 +1,9 @@
-using System.Text.Json;
 using Confluent.Kafka;
 using FileUploaderPartA.Infrastructure.Configurations;
 using FileUploaderPartA.Infrastructure.Interfaces.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System.Text.Json;
 
 namespace FileUploaderPartA.Infrastructure.Services;
 

@@ -41,7 +41,7 @@ public class ImportRepository : IImportRepository
                @CreatedAt
             );";
 
-            string status = import.Status.ToString();
+            string status = nameof(import.Status);
 
             var parameters = new
             {
@@ -51,17 +51,16 @@ public class ImportRepository : IImportRepository
                 import.CreatedAt
             };
 
-            using (IDbConnection connection = _dbContext.CreateConnection())
-            {
-                int result = await connection.ExecuteAsync(sql, parameters);
+            using IDbConnection connection = _dbContext.CreateConnection();
 
-                _logger.LogInformation("{Repository}.{Method} - Success: Import inserted. Id: {ImportId}",
-                                GetType().Name,
-                                nameof(CreateAsync),
-                                import.Id);
+            int result = await connection.ExecuteAsync(sql, parameters);
 
-                return result == 1;
-            }
+            _logger.LogInformation("{Repository}.{Method} - Success: Import inserted. Id: {ImportId}",
+                            GetType().Name,
+                            nameof(CreateAsync),
+                            import.Id);
+
+            return result == 1;
         }
         catch (Exception ex)
         {
@@ -71,7 +70,7 @@ public class ImportRepository : IImportRepository
                        nameof(CreateAsync),
                        import.Id);
 
-            return false;
+            throw;
         }
     }
 }

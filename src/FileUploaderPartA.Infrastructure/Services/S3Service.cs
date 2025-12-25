@@ -34,13 +34,9 @@ public class S3Service : IS3Service
 
             TransferUtility fileTransferUtility = new(_s3Client);
 
-            using MemoryStream memoryStream = new();
-            await fileStream.CopyToAsync(memoryStream);
-            memoryStream.Position = 0;
-
             TransferUtilityUploadRequest uploadRequest = new()
             {
-                InputStream = memoryStream,
+                InputStream = fileStream,
                 Key = destinyPath,
                 BucketName = bucket
             };
@@ -53,7 +49,7 @@ public class S3Service : IS3Service
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to upload file to S3. Bucket: {Bucket}, Key: {Key}", bucket, destinyPath);
-            return false;
+            throw;
         }
     }
 }

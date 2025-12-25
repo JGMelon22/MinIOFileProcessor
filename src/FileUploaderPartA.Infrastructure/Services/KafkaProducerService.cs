@@ -4,6 +4,7 @@ using FileUploaderPartA.Infrastructure.Interfaces.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace FileUploaderPartA.Infrastructure.Services;
 
@@ -26,7 +27,8 @@ public class KafkaProducerService : IKafkaProducerService
     {
         JsonSerializerOptions jsonOptions = new()
         {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            Converters = { new JsonStringEnumConverter() }
         };
 
         string jsonMessage = JsonSerializer.Serialize(message, jsonOptions);
@@ -58,7 +60,7 @@ public class KafkaProducerService : IKafkaProducerService
                 key,
                 topic);
 
-            return false;
+            throw;
         }
     }
 }

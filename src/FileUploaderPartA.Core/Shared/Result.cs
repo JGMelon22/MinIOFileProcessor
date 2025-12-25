@@ -1,6 +1,6 @@
 namespace FileUploaderPartA.Core.Shared;
 
-public class Result<T>
+public class Result<T> 
 {
     private Result(T? data, bool isSuccess, string message)
     {

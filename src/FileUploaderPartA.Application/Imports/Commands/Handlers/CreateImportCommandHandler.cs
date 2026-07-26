@@ -35,16 +35,16 @@ public class CreateImportCommandHandler : IRequestHandler<CreateImportCommand, R
     {
         try
         {
-            var file = request.request.CsvFile;
+            FileData file = request.request.CsvFile;
 
             var fileName = Path.GetFileName(file.FileName);
             var uniqueName = $"{Guid.NewGuid()}_{fileName}";
             var s3Key = uniqueName;
 
             await _s3Service.UploadFileAsync(
-                _uploadConfiguration.BucketName,
-                file,
-                s3Key
+                bucket: _uploadConfiguration.BucketName,
+                fileStream: file.Content,
+                destinyPath: s3Key
             );
 
             var s3Url = $"{_uploadConfiguration.DNS}/{_uploadConfiguration.BucketName}/{s3Key}";

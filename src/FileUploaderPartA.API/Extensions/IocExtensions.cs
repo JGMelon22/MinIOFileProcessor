@@ -16,7 +16,6 @@ public static class IocExtensions
             .AddInMemoryStorage();
 
         services.AddHealthChecks();
-
         return services;
     }
 

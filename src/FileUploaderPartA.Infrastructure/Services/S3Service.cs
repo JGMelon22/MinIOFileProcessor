@@ -2,7 +2,7 @@ using Amazon.S3;
 using Amazon.S3.Transfer;
 using FileUploaderPartA.Infrastructure.Configurations;
 using FileUploaderPartA.Infrastructure.Interfaces.Services;
-using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -27,7 +27,7 @@ public class S3Service : IS3Service
         _logger = logger;
     }
 
-    public async Task UploadFileAsync(string bucket, IFormFile file, string destinyPath)
+    public async Task UploadFileAsync(string bucket, Stream fileStream, string destinyPath)
     {
         try
         {
@@ -35,13 +35,9 @@ public class S3Service : IS3Service
 
             TransferUtility fileTransferUtility = new(_s3Client);
 
-            using MemoryStream memoryStream = new();
-            await file.CopyToAsync(memoryStream);
-            memoryStream.Position = 0;
-
             TransferUtilityUploadRequest uploadRequest = new()
             {
-                InputStream = memoryStream,
+                InputStream = fileStream,
                 Key = destinyPath,
                 BucketName = bucket
             };

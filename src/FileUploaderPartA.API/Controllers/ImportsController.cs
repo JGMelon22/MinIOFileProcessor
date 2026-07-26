@@ -1,5 +1,6 @@
 using FileUploaderPartA.Application.Imports.Commands;
 using FileUploaderPartA.Core.Domains.Imports.Dtos;
+using FileUploaderPartA.Core.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,11 +18,21 @@ public class ImportsController : ControllerBase
     }
 
     [HttpPost]
+    [Consumes("multipart/form-data")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> ImportFileAsync([FromForm] CreateImportRequest newImportFile)
+    public async Task<IActionResult> ImportFileAsync(IFormFile newImportFile)
     {
-        var file = await _mediator.Send(new CreateImportCommand(newImportFile));
+        FileData fileData = new(
+           Content: newImportFile.OpenReadStream(),
+           FileName: newImportFile.FileName,
+           ContentType: newImportFile.ContentType,
+           Length: newImportFile.Length
+       );
+
+        CreateImportRequest request = new(fileData);
+
+        Result<bool> file = await _mediator.Send(new CreateImportCommand(request));
         return file.IsSuccess
             ? Created()
             : BadRequest(file);

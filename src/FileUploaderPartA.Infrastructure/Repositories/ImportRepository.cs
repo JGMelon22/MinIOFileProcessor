@@ -3,7 +3,6 @@ using FileUploaderPartA.Core.Domains.Imports.Entities;
 using FileUploaderPartA.Infrastructure.Data;
 using FileUploaderPartA.Infrastructure.Interfaces.Repository;
 using Microsoft.Extensions.Logging;
-using System.Data;
 
 namespace FileUploaderPartA.Infrastructure.Repositories;
 
@@ -26,21 +25,21 @@ public class ImportRepository : IImportRepository
                 GetType().Name, nameof(CreateAsync), import);
 
             const string sql = """
-                INSERT INTO imports
-                (
-                   id,
-                   s3_path,
-                   status,
-                   created_at
-                )
-                VALUES
-                (
-                   @Id,
-                   @S3Path,
-                   @Status,
-                   @CreatedAt
-                );
-                """;
+                               INSERT INTO imports
+                               (
+                                  id,
+                                  s3_path,
+                                  status,
+                                  created_at
+                               )
+                               VALUES
+                               (
+                                  @Id,
+                                  @S3Path,
+                                  @Status,
+                                  @CreatedAt
+                               );
+                               """;
 
             var parameters = new
             {
@@ -50,9 +49,9 @@ public class ImportRepository : IImportRepository
                 import.CreatedAt
             };
 
-            using IDbConnection connection = _dbContext.CreateConnection();
+            using var connection = _dbContext.CreateConnection();
 
-            int result = await connection.ExecuteAsync(sql, parameters);
+            var result = await connection.ExecuteAsync(sql, parameters);
 
             _logger.LogInformation("{Repository}.{Method} - Success: Import created {ImportId}",
                 GetType().Name, nameof(CreateAsync), import.Id);

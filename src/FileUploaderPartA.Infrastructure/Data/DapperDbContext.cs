@@ -1,6 +1,6 @@
+using System.Data;
 using Microsoft.Extensions.Configuration;
 using MySqlConnector;
-using System.Data;
 
 namespace FileUploaderPartA.Infrastructure.Data;
 
@@ -16,5 +16,7 @@ public class DapperDbContext
     }
 
     public IDbConnection CreateConnection()
-        => new MySqlConnection(_connectionString);
+    {
+        return new MySqlConnection(_connectionString);
+    }
 }

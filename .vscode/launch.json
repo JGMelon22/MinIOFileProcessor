@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/src/FileUploaderPartA.API/bin/Debug/net8.0/FileUploaderPartA.API.dll",
+            "program": "${workspaceFolder}/src/FileUploaderPartA.API/bin/Debug/net10.0/FileUploaderPartA.API.dll",
             "args": [],
             "cwd": "${workspaceFolder}/src/FileUploaderPartA.API",
             "stopAtEntry": false,

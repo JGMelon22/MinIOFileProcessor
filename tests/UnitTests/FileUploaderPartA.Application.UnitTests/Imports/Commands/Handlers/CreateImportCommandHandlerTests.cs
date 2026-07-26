@@ -1,8 +1,8 @@
-﻿using FileUploaderPartA.Application.Imports.Commands;
+﻿using System.Text;
+using FileUploaderPartA.Application.Imports.Commands;
 using FileUploaderPartA.Application.Imports.Commands.Handlers;
 using FileUploaderPartA.Core.Domains.Imports.Dtos;
 using FileUploaderPartA.Core.Domains.Imports.Entities;
-using FileUploaderPartA.Core.Shared;
 using FileUploaderPartA.Infrastructure.Configurations;
 using FileUploaderPartA.Infrastructure.Interfaces.Repository;
 using FileUploaderPartA.Infrastructure.Interfaces.Services;
@@ -10,9 +10,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Moq;
 using Shouldly;
-using System.Text;
 
 namespace FileUploaderPartA.Application.UnitTests.Imports.Commands.Handlers;
+
 public class CreateImportCommandHandlerTests
 {
     [Fact]
@@ -40,14 +40,14 @@ public class CreateImportCommandHandlerTests
 
         kafkaConfigOptions.Setup(x => x.Value).Returns(kafkaConfiguration);
 
-        byte[] filebytes = Encoding.UTF8.GetBytes("sample-data");
+        var filebytes = Encoding.UTF8.GetBytes("sample-data");
         IFormFile file = new FormFile(new MemoryStream(filebytes), 0, filebytes.Length, "Data", "sample-data.csv")
         {
             Headers = new HeaderDictionary(),
             ContentType = "text/csv"
         };
 
-        CreateImportRequest importRequest = new(CsvFile: file);
+        CreateImportRequest importRequest = new(file);
 
         CreateImportCommand command = new(importRequest);
 
@@ -55,7 +55,7 @@ public class CreateImportCommandHandlerTests
             uploadConfigurationOptions.Object, kafkaConfigOptions.Object, kafkaProducerService.Object);
 
         // Act
-        Result<bool> result = await handler.Handle(command, CancellationToken.None);
+        var result = await handler.Handle(command, CancellationToken.None);
 
         // Assert
         result.IsSuccess.ShouldBeTrue();
@@ -63,8 +63,10 @@ public class CreateImportCommandHandlerTests
         result.Message.ShouldBe("Success");
 
         importRepository.Verify(x => x.CreateAsync(It.IsAny<Import>()), Times.Once);
-        kafkaProducerService.Verify(x => x.ProduceAsync(It.IsAny<string>(), It.IsAny<Import>(), It.IsAny<string>()), Times.Once);
-        s3Service.Verify(x => x.UploadFileAsync(It.IsAny<string>(), It.IsAny<IFormFile>(), It.IsAny<string>()), Times.Once);
+        kafkaProducerService.Verify(x => x.ProduceAsync(It.IsAny<string>(), It.IsAny<Import>(), It.IsAny<string>()),
+            Times.Once);
+        s3Service.Verify(x => x.UploadFileAsync(It.IsAny<string>(), It.IsAny<IFormFile>(), It.IsAny<string>()),
+            Times.Once);
     }
 
     [Fact]
@@ -80,26 +82,26 @@ public class CreateImportCommandHandlerTests
         KafkaConfiguration kafkaConfiguration = new() { Endpoint = "kafka:00000", ImportsTopic = "some-kafka-topic" };
 
         s3Service.Setup(x => x.UploadFileAsync(It.IsAny<string>(), It.IsAny<IFormFile>(), It.IsAny<string>()))
-                .ThrowsAsync(new Exception("S3 error"));
+            .ThrowsAsync(new Exception("S3 error"));
 
         importRepository.Setup(x => x.CreateAsync(It.IsAny<Import>()))
             .ReturnsAsync(true);
 
         kafkaProducerService.Setup(x => x.ProduceAsync(It.IsAny<string>(), It.IsAny<Import>(), It.IsAny<string>()))
-                .Returns(Task.CompletedTask);
+            .Returns(Task.CompletedTask);
 
         uploadConfigurationOptions.Setup(x => x.Value).Returns(uploadConfiguration);
 
         kafkaConfigOptions.Setup(x => x.Value).Returns(kafkaConfiguration);
 
-        byte[] filebytes = Encoding.UTF8.GetBytes("sample-data");
+        var filebytes = Encoding.UTF8.GetBytes("sample-data");
         IFormFile file = new FormFile(new MemoryStream(filebytes), 0, filebytes.Length, "Data", "sample-data.csv")
         {
             Headers = new HeaderDictionary(),
             ContentType = "text/csv"
         };
 
-        CreateImportRequest importRequest = new(CsvFile: file);
+        CreateImportRequest importRequest = new(file);
 
         CreateImportCommand command = new(importRequest);
 
@@ -107,15 +109,17 @@ public class CreateImportCommandHandlerTests
             uploadConfigurationOptions.Object, kafkaConfigOptions.Object, kafkaProducerService.Object);
 
         // Act
-        Result<bool> result = await handler.Handle(command, CancellationToken.None);
+        var result = await handler.Handle(command, CancellationToken.None);
 
         // Assert
         result.IsSuccess.ShouldBeFalse();
         result.Message.ShouldContain("S3 error");
 
         importRepository.Verify(x => x.CreateAsync(It.IsAny<Import>()), Times.Never);
-        kafkaProducerService.Verify(x => x.ProduceAsync(It.IsAny<string>(), It.IsAny<Import>(), It.IsAny<string>()), Times.Never);
-        s3Service.Verify(x => x.UploadFileAsync(It.IsAny<string>(), It.IsAny<IFormFile>(), It.IsAny<string>()), Times.Once);
+        kafkaProducerService.Verify(x => x.ProduceAsync(It.IsAny<string>(), It.IsAny<Import>(), It.IsAny<string>()),
+            Times.Never);
+        s3Service.Verify(x => x.UploadFileAsync(It.IsAny<string>(), It.IsAny<IFormFile>(), It.IsAny<string>()),
+            Times.Once);
     }
 
     [Fact]
@@ -144,14 +148,14 @@ public class CreateImportCommandHandlerTests
 
         kafkaConfigOptions.Setup(x => x.Value).Returns(kafkaConfiguration);
 
-        byte[] filebytes = Encoding.UTF8.GetBytes("sample-data");
+        var filebytes = Encoding.UTF8.GetBytes("sample-data");
         IFormFile file = new FormFile(new MemoryStream(filebytes), 0, filebytes.Length, "Data", "sample-data.csv")
         {
             Headers = new HeaderDictionary(),
             ContentType = "text/csv"
         };
 
-        CreateImportRequest importRequest = new(CsvFile: file);
+        CreateImportRequest importRequest = new(file);
 
         CreateImportCommand command = new(importRequest);
 
@@ -159,15 +163,17 @@ public class CreateImportCommandHandlerTests
             uploadConfigurationOptions.Object, kafkaConfigOptions.Object, kafkaProducerService.Object);
 
         // Act
-        Result<bool> result = await handler.Handle(command, CancellationToken.None);
+        var result = await handler.Handle(command, CancellationToken.None);
 
         // Assert
         result.IsSuccess.ShouldBeFalse();
         result.Message.ShouldContain("Kafka error");
 
         importRepository.Verify(x => x.CreateAsync(It.IsAny<Import>()), Times.Once);
-        kafkaProducerService.Verify(x => x.ProduceAsync(It.IsAny<string>(), It.IsAny<Import>(), It.IsAny<string>()), Times.Once);
-        s3Service.Verify(x => x.UploadFileAsync(It.IsAny<string>(), It.IsAny<IFormFile>(), It.IsAny<string>()), Times.Once);
+        kafkaProducerService.Verify(x => x.ProduceAsync(It.IsAny<string>(), It.IsAny<Import>(), It.IsAny<string>()),
+            Times.Once);
+        s3Service.Verify(x => x.UploadFileAsync(It.IsAny<string>(), It.IsAny<IFormFile>(), It.IsAny<string>()),
+            Times.Once);
     }
 
     [Fact]
@@ -189,20 +195,20 @@ public class CreateImportCommandHandlerTests
             .ThrowsAsync(new Exception("Database error"));
 
         kafkaProducerService.Setup(x => x.ProduceAsync(It.IsAny<string>(), It.IsAny<Import>(), It.IsAny<string>()))
-             .Returns(Task.CompletedTask);
+            .Returns(Task.CompletedTask);
 
         uploadConfigurationOptions.Setup(x => x.Value).Returns(uploadConfiguration);
 
         kafkaConfigOptions.Setup(x => x.Value).Returns(kafkaConfiguration);
 
-        byte[] filebytes = Encoding.UTF8.GetBytes("sample-data");
+        var filebytes = Encoding.UTF8.GetBytes("sample-data");
         IFormFile file = new FormFile(new MemoryStream(filebytes), 0, filebytes.Length, "Data", "sample-data.csv")
         {
             Headers = new HeaderDictionary(),
             ContentType = "text/csv"
         };
 
-        CreateImportRequest importRequest = new(CsvFile: file);
+        CreateImportRequest importRequest = new(file);
 
         CreateImportCommand command = new(importRequest);
 
@@ -210,14 +216,16 @@ public class CreateImportCommandHandlerTests
             uploadConfigurationOptions.Object, kafkaConfigOptions.Object, kafkaProducerService.Object);
 
         // Act
-        Result<bool> result = await handler.Handle(command, CancellationToken.None);
+        var result = await handler.Handle(command, CancellationToken.None);
 
         // Assert
         result.IsSuccess.ShouldBeFalse();
         result.Message.ShouldContain("Database error");
 
         importRepository.Verify(x => x.CreateAsync(It.IsAny<Import>()), Times.Once);
-        kafkaProducerService.Verify(x => x.ProduceAsync(It.IsAny<string>(), It.IsAny<Import>(), It.IsAny<string>()), Times.Never);
-        s3Service.Verify(x => x.UploadFileAsync(It.IsAny<string>(), It.IsAny<IFormFile>(), It.IsAny<string>()), Times.Once);
+        kafkaProducerService.Verify(x => x.ProduceAsync(It.IsAny<string>(), It.IsAny<Import>(), It.IsAny<string>()),
+            Times.Never);
+        s3Service.Verify(x => x.UploadFileAsync(It.IsAny<string>(), It.IsAny<IFormFile>(), It.IsAny<string>()),
+            Times.Once);
     }
 }

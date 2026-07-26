@@ -10,19 +10,19 @@ namespace FileUploaderPartA.Infrastructure.Services;
 
 public class S3Service : IS3Service
 {
-    private readonly IAmazonS3 _s3Client;
     private readonly ILogger<S3Service> _logger;
+    private readonly IAmazonS3 _s3Client;
 
     public S3Service(IOptions<AmazonS3Configuration> options, ILogger<S3Service> logger)
     {
         _s3Client = new AmazonS3Client(
-          options.Value.AccessKey,
-          options.Value.SecretKey,
-          new AmazonS3Config
-          {
-              ServiceURL = options.Value.ServiceURL,
-              ForcePathStyle = options.Value.ForcePathStyle
-          }
+            options.Value.AccessKey,
+            options.Value.SecretKey,
+            new AmazonS3Config
+            {
+                ServiceURL = options.Value.ServiceURL,
+                ForcePathStyle = options.Value.ForcePathStyle
+            }
         );
         _logger = logger;
     }
@@ -48,7 +48,8 @@ public class S3Service : IS3Service
 
             await fileTransferUtility.UploadAsync(uploadRequest);
 
-            _logger.LogInformation("File uploaded successfully to S3. Bucket: {Bucket}, Key: {Key}", bucket, destinyPath);
+            _logger.LogInformation("File uploaded successfully to S3. Bucket: {Bucket}, Key: {Key}", bucket,
+                destinyPath);
         }
         catch (Exception ex)
         {

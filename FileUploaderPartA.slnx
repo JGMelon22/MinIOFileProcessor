@@ -1,0 +1,26 @@
+<Solution>
+    <Configurations>
+        <Platform Name="Any CPU"/>
+        <Platform Name="x64"/>
+        <Platform Name="x86"/>
+    </Configurations>
+    <Folder Name="/observability/">
+        <File Path="observability/otel-collector-config.yaml"/>
+        <File Path="observability/prometheus.yml"/>
+    </Folder>
+    <Folder Name="/src/">
+        <Project Path="src/FileUploaderPartA.API/FileUploaderPartA.API.csproj"/>
+        <Project Path="src/FileUploaderPartA.Application/FileUploaderPartA.Application.csproj"/>
+        <Project Path="src/FileUploaderPartA.Core/FileUploaderPartA.Core.csproj"/>
+        <Project Path="src/FileUploaderPartA.Infrastructure/FileUploaderPartA.Infrastructure.csproj"/>
+    </Folder>
+    <Folder Name="/tests/"/>
+    <Folder Name="/tests/UnitTests/">
+        <Project Path="tests/UnitTests/FileUploaderPartA.Api.UnitTests/FileUploaderPartA.Api.UnitTests.csproj"/>
+        <Project
+                Path="tests/UnitTests/FileUploaderPartA.Application.UnitTests/FileUploaderPartA.Application.UnitTests.csproj"/>
+    </Folder>
+    <Project Path="docker-compose.dcproj">
+        <Build Solution="*|Any CPU"/>
+    </Project>
+</Solution>

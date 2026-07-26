@@ -9,6 +9,7 @@ using Moq;
 using Shouldly;
 
 namespace FileUploaderPartA.Api.UnitTests.Controllers.Imports;
+
 public class ImportsControllerTests
 {
     [Fact]
@@ -16,14 +17,14 @@ public class ImportsControllerTests
     {
         // Arrange 
         Mock<IMediator> mediator = new();
-        CreateImportRequest importRequest = new(CsvFile: new Mock<IFormFile>().Object);
-        ImportsController controller = new ImportsController(mediator.Object);
+        CreateImportRequest importRequest = new(new Mock<IFormFile>().Object);
+        var controller = new ImportsController(mediator.Object);
 
         mediator.Setup(m => m.Send(It.IsAny<CreateImportCommand>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(Result<bool>.Success(true, "Success"));
+            .ReturnsAsync(Result<bool>.Success(true));
 
         // Act
-        IActionResult result = await controller.ImportFileAsync(importRequest);
+        var result = await controller.ImportFileAsync(importRequest);
 
         // Assert
         result.ShouldNotBeNull();
@@ -35,18 +36,17 @@ public class ImportsControllerTests
     {
         // Arrange 
         Mock<IMediator> mediator = new();
-        CreateImportRequest importRequest = new(CsvFile: new Mock<IFormFile>().Object);
-        ImportsController controller = new ImportsController(mediator.Object);
+        CreateImportRequest importRequest = new(new Mock<IFormFile>().Object);
+        var controller = new ImportsController(mediator.Object);
 
         mediator.Setup(m => m.Send(It.IsAny<CreateImportCommand>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(Result<bool>.Failure("Import failed"));
 
         // Act
-        IActionResult result = await controller.ImportFileAsync(importRequest);
+        var result = await controller.ImportFileAsync(importRequest);
 
         // Assert
         result.ShouldNotBeNull();
         result.ShouldBeOfType<BadRequestObjectResult>();
     }
-
 }

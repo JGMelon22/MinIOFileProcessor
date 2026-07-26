@@ -1,22 +1,20 @@
-using FileUploaderPartA.Core.Domains.Imports.Entities;
 using FileUploaderPartA.Core.Domains.Imports.Mappings;
 using FileUploaderPartA.Core.Shared;
 using FileUploaderPartA.Infrastructure.Configurations;
 using FileUploaderPartA.Infrastructure.Interfaces.Repository;
 using FileUploaderPartA.Infrastructure.Interfaces.Services;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 
 namespace FileUploaderPartA.Application.Imports.Commands.Handlers;
 
 public class CreateImportCommandHandler : IRequestHandler<CreateImportCommand, Result<bool>>
 {
-    private readonly IS3Service _s3Service;
     private readonly IImportRepository _importRepository;
-    private readonly FileUploadConfiguration _uploadConfiguration;
-    private readonly IKafkaProducerService _kafkaProducerService;
     private readonly string _importsTopic;
+    private readonly IKafkaProducerService _kafkaProducerService;
+    private readonly IS3Service _s3Service;
+    private readonly FileUploadConfiguration _uploadConfiguration;
 
     public CreateImportCommandHandler(
         IS3Service s3Service,
@@ -37,21 +35,21 @@ public class CreateImportCommandHandler : IRequestHandler<CreateImportCommand, R
     {
         try
         {
-            IFormFile file = request.request.CsvFile;
+            var file = request.request.CsvFile;
 
-            string fileName = Path.GetFileName(file.FileName);
-            string uniqueName = $"{Guid.NewGuid()}_{fileName}";
-            string s3Key = uniqueName;
+            var fileName = Path.GetFileName(file.FileName);
+            var uniqueName = $"{Guid.NewGuid()}_{fileName}";
+            var s3Key = uniqueName;
 
             await _s3Service.UploadFileAsync(
-                            bucket: _uploadConfiguration.BucketName,
-                            file: file,
-                            destinyPath: s3Key
-                        );
+                _uploadConfiguration.BucketName,
+                file,
+                s3Key
+            );
 
-            string s3Url = $"{_uploadConfiguration.DNS}/{_uploadConfiguration.BucketName}/{s3Key}";
+            var s3Url = $"{_uploadConfiguration.DNS}/{_uploadConfiguration.BucketName}/{s3Key}";
 
-            Import import = MappingExtensions.ToDomain(s3Url);
+            var import = MappingExtensions.ToDomain(s3Url);
 
             await _importRepository.CreateAsync(import);
             await _kafkaProducerService.ProduceAsync(import.Id, import, _importsTopic);

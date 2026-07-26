@@ -6,9 +6,11 @@ namespace FileUploaderPartA.Core.Domains.Imports.Mappings;
 public static class MappingExtensions
 {
     public static Import ToDomain(string s3Path)
-        => new Import(
-            id: Guid.NewGuid().ToString(),
-            s3Path: s3Path,
-            status: Status.Pending
+    {
+        return new Import(
+            Guid.NewGuid().ToString(),
+            s3Path,
+            Status.Pending
         );
+    }
 }

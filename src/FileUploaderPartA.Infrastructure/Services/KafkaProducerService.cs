@@ -1,25 +1,25 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Confluent.Kafka;
 using FileUploaderPartA.Infrastructure.Configurations;
 using FileUploaderPartA.Infrastructure.Interfaces.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace FileUploaderPartA.Infrastructure.Services;
 
 public class KafkaProducerService : IKafkaProducerService
 {
-    private readonly IProducer<string, string> _producer;
     private readonly ILogger<KafkaProducerService> _logger;
+    private readonly IProducer<string, string> _producer;
 
     public KafkaProducerService(IOptions<KafkaConfiguration> config, ILogger<KafkaProducerService> logger)
     {
         _producer = new ProducerBuilder<string, string>(new ProducerConfig
-        {
-            BootstrapServers = config.Value.Endpoint
-        })
-        .Build();
+            {
+                BootstrapServers = config.Value.Endpoint
+            })
+            .Build();
         _logger = logger;
     }
 
@@ -31,7 +31,7 @@ public class KafkaProducerService : IKafkaProducerService
             Converters = { new JsonStringEnumConverter() }
         };
 
-        string jsonMessage = JsonSerializer.Serialize(message, jsonOptions);
+        var jsonMessage = JsonSerializer.Serialize(message, jsonOptions);
 
         try
         {
@@ -47,7 +47,6 @@ public class KafkaProducerService : IKafkaProducerService
                 Key = key,
                 Value = jsonMessage
             });
-
         }
         catch (ProduceException<string, string> ex)
         {

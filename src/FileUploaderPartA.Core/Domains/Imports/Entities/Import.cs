@@ -4,7 +4,9 @@ namespace FileUploaderPartA.Core.Domains.Imports.Entities;
 
 public class Import
 {
-    public Import() { }
+    public Import()
+    {
+    }
 
     public Import(string id, string s3Path, Status status)
     {

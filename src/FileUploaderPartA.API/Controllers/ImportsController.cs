@@ -1,8 +1,8 @@
 using FileUploaderPartA.Application.Imports.Commands;
 using FileUploaderPartA.Core.Domains.Imports.Dtos;
 using FileUploaderPartA.Core.Shared;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using NetDevPack.SimpleMediator;
 
 namespace FileUploaderPartA.API.Controllers;
 

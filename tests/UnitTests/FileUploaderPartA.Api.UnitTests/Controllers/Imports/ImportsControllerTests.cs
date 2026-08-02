@@ -17,14 +17,14 @@ public class ImportsControllerTests
     {
         // Arrange 
         Mock<IMediator> mediator = new();
-        CreateImportRequest importRequest = new(new Mock<IFormFile>().Object);
+        // CreateImportRequest importRequest = new();
         var controller = new ImportsController(mediator.Object);
 
         mediator.Setup(m => m.Send(It.IsAny<CreateImportCommand>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(Result<bool>.Success(true));
 
         // Act
-        var result = await controller.ImportFileAsync(importRequest);
+        var result = await controller.ImportFileAsync(It.IsAny<IFormFile>());
 
         // Assert
         result.ShouldNotBeNull();
@@ -36,14 +36,14 @@ public class ImportsControllerTests
     {
         // Arrange 
         Mock<IMediator> mediator = new();
-        CreateImportRequest importRequest = new(new Mock<IFormFile>().Object);
+        // CreateImportRequest importRequest = new(It.IsAny<FileData>());
         var controller = new ImportsController(mediator.Object);
 
         mediator.Setup(m => m.Send(It.IsAny<CreateImportCommand>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(Result<bool>.Failure("Import failed"));
 
         // Act
-        var result = await controller.ImportFileAsync(importRequest);
+        var result = await controller.ImportFileAsync(It.IsAny<IFormFile>());
 
         // Assert
         result.ShouldNotBeNull();

@@ -1,5 +1,4 @@
 using FileUploaderPartA.API.Extensions;
-using FileUploaderPartA.Application.Imports.Commands.Handlers;
 using FileUploaderPartA.Infrastructure.Configurations;
 using FileUploaderPartA.Infrastructure.Data;
 using HealthChecks.UI.Client;
@@ -15,8 +14,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddMediatR(cfg =>
-    cfg.RegisterServicesFromAssembly(typeof(CreateImportCommandHandler).Assembly));
+builder.Services.AddHandlers();
 
 builder.Services.Configure<AmazonS3Configuration>(builder.Configuration.GetSection("AWS"));
 builder.Services.Configure<FileUploadConfiguration>(builder.Configuration.GetSection("UploadConfiguration"));

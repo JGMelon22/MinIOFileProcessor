@@ -3,8 +3,8 @@ using FileUploaderPartA.Core.Shared;
 using FileUploaderPartA.Infrastructure.Configurations;
 using FileUploaderPartA.Infrastructure.Interfaces.Repository;
 using FileUploaderPartA.Infrastructure.Interfaces.Services;
-using MediatR;
 using Microsoft.Extensions.Options;
+using NetDevPack.SimpleMediator;
 
 namespace FileUploaderPartA.Application.Imports.Commands.Handlers;
 
@@ -35,7 +35,7 @@ public class CreateImportCommandHandler : IRequestHandler<CreateImportCommand, R
     {
         try
         {
-            FileData file = request.request.CsvFile;
+            FileData file = request.Request.CsvFile;
 
             var fileName = Path.GetFileName(file.FileName);
             var uniqueName = $"{Guid.NewGuid()}_{fileName}";

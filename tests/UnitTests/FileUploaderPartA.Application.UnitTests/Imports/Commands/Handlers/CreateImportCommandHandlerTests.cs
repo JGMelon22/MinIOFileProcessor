@@ -27,7 +27,7 @@ public class CreateImportCommandHandlerTests
         Mock<IOptions<KafkaConfiguration>> kafkaConfigOptions = new();
         KafkaConfiguration kafkaConfiguration = new() { Endpoint = "kafka:00000", ImportsTopic = "some-kafka-topic" };
 
-        s3Service.Setup(x => x.UploadFileAsync(It.IsAny<string>(), It.IsAny<IFormFile>(), It.IsAny<string>()))
+        s3Service.Setup(x => x.UploadFileAsync(It.IsAny<string>(), It.IsAny<FileStream>(), It.IsAny<string>()))
             .Returns(Task.CompletedTask);
 
         importRepository.Setup(x => x.CreateAsync(It.IsAny<Import>()))
@@ -41,11 +41,11 @@ public class CreateImportCommandHandlerTests
         kafkaConfigOptions.Setup(x => x.Value).Returns(kafkaConfiguration);
 
         var filebytes = Encoding.UTF8.GetBytes("sample-data");
-        IFormFile file = new FormFile(new MemoryStream(filebytes), 0, filebytes.Length, "Data", "sample-data.csv")
-        {
-            Headers = new HeaderDictionary(),
-            ContentType = "text/csv"
-        };
+        // IFormFile file = new FormFile(new MemoryStream(filebytes), 0, filebytes.Length, "Data", "sample-data.csv")
+        // {
+        //     Headers = new HeaderDictionary(),
+        //     ContentType = "text/csv"
+        // };
 
         CreateImportRequest importRequest = new(file);
 

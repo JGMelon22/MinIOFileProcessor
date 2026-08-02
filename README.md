@@ -1,6 +1,6 @@
 # MinIOFileProcessor - System A (Observability Branch)
 
-This project handles the upload of CSV files to MinIO — a local simulation of Amazon S3. After uploading, it stores the file's storage path in a MySQL database and publishes a message to a Kafka topic to notify downstream services.
+This project handles the upload of CSV files to RustFS — a local simulation of Amazon S3. After uploading, it stores the file's storage path in a MySQL database and publishes a message to a Kafka topic to notify downstream services.
 
 ---
 
@@ -26,7 +26,7 @@ In real-world scenarios, large CSV file uploads (up to 7MB and ~100,000 rows) ca
 To improve scalability and maintainability, the system adopts a two-phase approach:
 
 1. ✅ Validate MIME type, header, and file size (≤ 7MB).  
-2. ✅ Upload to MinIO and store metadata in MySQL.  
+2. ✅ Upload to RustFS and store metadata in MySQL.  
 3. ✅ Publish a message to Kafka to notify downstream services.  
 
 A background service ([System B](https://github.com/JGMelon22/MinIOFileConsumer)) then asynchronously processes the file content based on business rules.
@@ -44,7 +44,7 @@ A background service ([System B](https://github.com/JGMelon22/MinIOFileConsumer)
     <img height="32" width="32" src="https://cdn.simpleicons.org/dotnet" alt=".NET" title=".NET" />
     <img height="32" width="32" src="https://cdn.simpleicons.org/swagger" alt="Swagger" title="Swagger" />
     <img height="32" width="32" src="https://cdn.simpleicons.org/mysql" alt="MySQL" title="MySQL" />
-    <img height="32" width="32" src="https://cdn.simpleicons.org/minio" alt="MinIO" title="MinIO" />
+    <img height="32" width="32" src="https://cdn.simpleicons.org/rustfs" alt="RustFS" title="RustFS" />
     <img height="32" width="32" src="https://cdn.simpleicons.org/apachekafka" alt="Apache Kafka" title="Apache Kafka" />
     <img height="32" width="32" src="https://cdn.simpleicons.org/jaeger" alt="Jaeger" title="Jaeger" />
     <img height="32" width="32" src="https://cdn.simpleicons.org/prometheus" alt="Prometheus" title="Prometheus" />
@@ -57,7 +57,7 @@ A background service ([System B](https://github.com/JGMelon22/MinIOFileConsumer)
 - **.NET** – Backend framework.  
 - **Swagger** – API documentation.  
 - **MySQL** – Relational database for metadata.  
-- **MinIO** – S3-compatible object storage (local).  
+- **RustFS** – S3-compatible object storage (local).  
 - **Apache Kafka** – Event streaming and queuing.  
 - **Jaeger** – Distributed tracing platform.  
 - **Grafana** – Visualization and dashboards.  

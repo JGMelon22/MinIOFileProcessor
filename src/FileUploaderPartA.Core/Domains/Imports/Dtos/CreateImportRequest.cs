@@ -1,6 +1,6 @@
 using FileUploaderPartA.Core.Shared;
-using FileUploaderPartA.Core.Shared.Validations.FileValidations;
 using System.ComponentModel.DataAnnotations;
+using FileUploaderPartA.Core.Shared.Validations._FileValidations;
 
 namespace FileUploaderPartA.Core.Domains.Imports.Dtos;
 

@@ -1,11 +1,11 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace FileUploaderPartA.Core.Shared.Validations.FileValidations;
+namespace FileUploaderPartA.Core.Shared.Validations._FileValidations;
 
 public class CsvValidations : ValidationAttribute
 {
     private const long MaxFileSizeInBytes = 2 * 1024 * 1024; // 2MB
-    private readonly string[] ValidMimeTypes = { "text/csv", "application/vnd.ms-excel" };
+    private readonly string[] _validMimeTypes = { "text/csv", "application/vnd.ms-excel" };
 
     protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
     {
@@ -15,9 +15,6 @@ public class CsvValidations : ValidationAttribute
         if (value is not FileData file)
             return new ValidationResult($"The input must be a {nameof(FileData)}.");
 
-        if (file.Content == null)
-            return new ValidationResult("File content cannot be null.");
-
         if (file.Length <= 0)
             return new ValidationResult("File cannot be empty.");
 
@@ -25,9 +22,9 @@ public class CsvValidations : ValidationAttribute
             return new ValidationResult(
                     $"The file size exceeds the maximum allowed size of {MaxFileSizeInBytes / (1024 * 1024)}MB.");
 
-        if (string.IsNullOrEmpty(file.ContentType) || !ValidMimeTypes.Contains(file.ContentType, StringComparer.OrdinalIgnoreCase))
+        if (string.IsNullOrEmpty(file.ContentType) || !_validMimeTypes.Contains(file.ContentType, StringComparer.OrdinalIgnoreCase))
             return new ValidationResult(
-                    $"File must be one of the following types: {string.Join(", ", ValidMimeTypes)}");
+                    $"File must be one of the following types: {string.Join(", ", _validMimeTypes)}");
 
         return ValidationResult.Success;
     }

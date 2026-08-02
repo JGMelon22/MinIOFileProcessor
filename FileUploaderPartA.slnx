@@ -14,6 +14,10 @@
         <Project Path="src/FileUploaderPartA.Core/FileUploaderPartA.Core.csproj" />
         <Project Path="src/FileUploaderPartA.Infrastructure/FileUploaderPartA.Infrastructure.csproj" />
     </Folder>
+    <Folder Name="/tests/" />
+    <Folder Name="/tests/UnitTests/">
+        <Project Path="tests/UnitTests/FileUploaderPartA.Api.UnitTests/FileUploaderPartA.Api.UnitTests.csproj" />
+    </Folder>
     <Project Path="docker-compose.dcproj">
         <Build Solution="*|Any CPU" />
     </Project>

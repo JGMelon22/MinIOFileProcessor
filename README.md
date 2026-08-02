@@ -34,7 +34,7 @@ A background service ([System B](https://github.com/JGMelon22/MinIOFileConsumer)
 ---
 
 ## 🗺️ Project Architecture
-![diagram](https://github.com/user-attachments/assets/a531f1f8-af8a-49fe-8c6d-4f9cfef49f23)
+![diagram](https://github.com/user-attachments/assets/9fe0bee5-1429-470a-96b4-565abab631b5)
 
 ---
 

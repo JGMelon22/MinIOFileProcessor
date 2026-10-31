@@ -4,11 +4,10 @@ using FileUploaderPartA.Infrastructure.Configurations;
 using FileUploaderPartA.Infrastructure.Interfaces.Repository;
 using FileUploaderPartA.Infrastructure.Interfaces.Services;
 using Microsoft.Extensions.Options;
-using NetDevPack.SimpleMediator;
 
 namespace FileUploaderPartA.Application.Imports.Commands.Handlers;
 
-public class CreateImportCommandHandler : IRequestHandler<CreateImportCommand, Result<bool>>
+public class CreateImportCommandHandler : ICreateImportCommandHandler
 {
     private readonly IImportRepository _importRepository;
     private readonly string _importsTopic;
@@ -31,7 +30,7 @@ public class CreateImportCommandHandler : IRequestHandler<CreateImportCommand, R
         _importsTopic = kafkaConfigOptions.Value.ImportsTopic;
     }
 
-    public async Task<Result<bool>> Handle(CreateImportCommand request, CancellationToken cancellationToken)
+    public async Task<Result<bool>> HandleAsync(CreateImportCommand request, CancellationToken cancellationToken)
     {
         try
         {
@@ -44,7 +43,8 @@ public class CreateImportCommandHandler : IRequestHandler<CreateImportCommand, R
             await _s3Service.UploadFileAsync(
                 bucket: _uploadConfiguration.BucketName,
                 fileStream: file.Content,
-                destinyPath: s3Key
+                destinyPath: s3Key,
+                cancellationToken: cancellationToken
             );
 
             var s3Url = $"{_uploadConfiguration.DNS}/{_uploadConfiguration.BucketName}/{s3Key}";

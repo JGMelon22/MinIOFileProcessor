@@ -26,13 +26,14 @@ public class S3Service : IS3Service
         _logger = logger;
     }
 
-    public async Task UploadFileAsync(string bucket, Stream fileStream, string destinyPath)
+    public async Task UploadFileAsync(string bucket, Stream fileStream, string destinyPath,
+        CancellationToken cancellationToken)
     {
         try
         {
             _logger.LogInformation("Starting file upload to S3. Bucket: {Bucket}, Key: {Key}", bucket, destinyPath);
 
-            TransferUtility fileTransferUtility = new(_s3Client);
+            using TransferUtility fileTransferUtility = new(_s3Client);
 
             TransferUtilityUploadRequest uploadRequest = new()
             {
@@ -41,7 +42,7 @@ public class S3Service : IS3Service
                 BucketName = bucket
             };
 
-            await fileTransferUtility.UploadAsync(uploadRequest);
+            await fileTransferUtility.UploadAsync(uploadRequest, cancellationToken);
 
             _logger.LogInformation("File uploaded successfully to S3. Bucket: {Bucket}, Key: {Key}", bucket,
                 destinyPath);

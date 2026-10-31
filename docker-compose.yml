@@ -27,24 +27,28 @@ services:
       - app-network
 
   kafka:
-    image: apache/kafka-native:4.3.1
+    image: apache/kafka-native:4.4.0
     container_name: kafka
     hostname: kafka
     ports:
       - "9092:9092"
+      - "29092:29092"
     environment:
       KAFKA_NODE_ID: 1
       KAFKA_PROCESS_ROLES: broker,controller
-      KAFKA_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_LISTENERS: INTERNAL://:9092,EXTERNAL://:29092,CONTROLLER://:9093
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9092,EXTERNAL://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
       KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+
     networks:
       - app-network
 
   # danielqsj Kafka Exporter
   kafka-exporter:
-    image: danielqsj/kafka-exporter:v1.9.0
+    image: danielqsj/kafka-exporter:v1.11.0
     container_name: kafka-exporter
     hostname: kafka-exporter
     ports:
@@ -60,7 +64,7 @@ services:
       - app-network
 
   rustfs:
-    image: rustfs/rustfs:1.0.0-beta.11
+    image: rustfs/rustfs:1.0.4
     container_name: rustfs
     hostname: rustfs
     environment:
@@ -76,7 +80,7 @@ services:
       - app-network
 
   mysql:
-    image: mysql:8.4.6
+    image: mysql:8.4.13
     container_name: mysql
     hostname: mysql
     restart: always
@@ -91,7 +95,7 @@ services:
       - app-network
 
   otel-collector:
-    image: otel/opentelemetry-collector-contrib:0.132.2
+    image: otel/opentelemetry-collector-contrib:0.164.0
     container_name: otel-collector
     volumes:
       - ./observability/otel-collector-config.yaml:/etc/otel-collector-config.yaml:ro
@@ -117,7 +121,7 @@ services:
       - app-network
 
   seq:
-    image: datalust/seq:2021.1
+    image: datalust/seq:2026.1
     container_name: seq
     hostname: seq
     environment:
@@ -132,7 +136,7 @@ services:
       - app-network
 
   prometheus:
-    image: prom/prometheus:v3.5.0
+    image: prom/prometheus:v3.15.1
     container_name: prometheus
     user: "nobody"
     volumes:

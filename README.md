@@ -99,3 +99,4 @@ These can be imported directly into Grafana to monitor application runtime, Kafk
 
 - **Kafka metrics** powered by [kafka_exporter](https://github.com/danielqsj/kafka_exporter) by [@danielqsj](https://github.com/danielqsj)  
 - **Architecture diagram** generated with [GitDiagram](https://gitdiagram.com/) by [@ahmedkhaleel2004](https://github.com/ahmedkhaleel2004)  
+- **[Refactoring a Modular Monolith Without MediatR in .NET](https://antondevtips.com/blog/refactoring-a-modular-monolith-without-mediatr-in-dotnet)** — by [Anton Martyniuk](https://antondevtips.com/)
